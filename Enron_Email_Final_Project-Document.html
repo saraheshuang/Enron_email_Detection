@@ -11794,7 +11794,7 @@ div#notebook {
 <ul>
 <li>four features are removed due to lack of data, See part;</li>
 <li>two new features are created to make full use of email variabls: 'poi_email_propotion_from' and 'poi_email_propotion_to' See part ;</li>
-<li>four features 'from_messages', 'to_messages', 'poi_email_propotion_from', and 'others', since they are not well related to the poi according to the average score in feature selection. See part </li>
+<li>four features 'from_messages', 'to_messages', 'poi_email_propotion_from', and 'others', since they are not well related to the poi according to the average score in feature selection. See part 2</li>
 </ul>
 </li>
 </ul>
@@ -11802,7 +11802,7 @@ div#notebook {
 <ul>
 <li><strong>Three Models</strong> I end up chose Gaussian Naive Bayes (GNB) algorithm. I applied three algorithm support vector classifer, random forest and GNB. I chose these three algorithm to test for a reason, <ul>
 <li>GNB is the most popular algorithm for abnormalty detection and work well for the skewed data; </li>
-<li>SVC is a very sophiciated methodswith usually very high accuracy, but it is also computationally expensive. The samples number is not that much, so SVC can apply; </li>
+<li>SVC is a very sophiciated methodswith usually very high accuracy, but it is also computationally expensive. The samples number is not that much, we can also reduce dimension through pca, so SVC can apply; </li>
 <li>Random forest is a sophicated methods that was improved upon the decision tree. I chose it over decision tree because decsion tree is a greedy methods that only try to achive the best information gain in every node - for dataset like this, since all the components are highly correlated, it might not be a good methods.</li>
 </ul>
 </li>
@@ -11820,13 +11820,14 @@ div#notebook {
 </ul>
 </li>
 </ul>
+<p>In the end, the GNB model's recall rate is 0.3333 and its percision rate is 0.36593.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -11836,6 +11837,7 @@ div#notebook {
 <span class="kn">from</span> <span class="nn">tester</span> <span class="kn">import</span> <span class="n">dump_classifier_and_data</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">finding_k_best_score</span> <span class="kn">import</span> <span class="n">split_data</span><span class="p">,</span> <span class="n">features_importance</span><span class="p">,</span> <span class="n">imputed_data</span><span class="p">,</span> <span class="n">find_best_k</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;final_project_dataset.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
@@ -11893,7 +11895,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">counting_obervation</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
@@ -11926,7 +11928,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">counting_data_feature</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
@@ -11963,7 +11965,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">print_feature_names</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
@@ -12000,7 +12002,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">counting_poi</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
@@ -12050,22 +12052,19 @@ The number of non-poi in this dataset is 128.
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">In</span> <span class="n">this</span> <span class="n">section</span><span class="p">,</span> <span class="n">we</span> <span class="n">examine</span> <span class="n">the</span> <span class="n">distributions</span> <span class="n">of</span> <span class="n">some</span> <span class="n">key</span> <span class="n">variables</span> <span class="ow">and</span> <span class="n">detect</span> <span class="n">an</span> <span class="n">outlier</span> <span class="n">named</span> <span class="s2">&quot;Total&quot;</span> <span class="ow">and</span> <span class="n">removed</span> <span class="n">it</span><span class="o">.</span>
-</pre></div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this section, we examine the distributions of some key variables and detect an outlier named "Total" and removed it.</p>
 
 </div>
 </div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#put enron_data in pd dataframe and change value from string to numeric</span>
@@ -12085,7 +12084,7 @@ The number of non-poi in this dataset is 128.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
@@ -12113,11 +12112,11 @@ The number of non-poi in this dataset is 128.
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[12]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[7]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.text.Text at 0x1183bbad0&gt;</pre>
+<pre>&lt;matplotlib.text.Text at 0x11a028d10&gt;</pre>
 </div>
 
 </div>
@@ -12662,7 +12661,7 @@ we decide to remove this outlier as it is a input mistake.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">salary_outlier</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">enron_data</span><span class="p">[</span><span class="s1">&#39;salary&#39;</span><span class="p">])</span>
@@ -12697,7 +12696,7 @@ we decide to remove this outlier as it is a input mistake.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#remove the outlier</span>
@@ -12723,7 +12722,7 @@ we decide to remove this outlier as it is a input mistake.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
@@ -12750,11 +12749,11 @@ we decide to remove this outlier as it is a input mistake.</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[15]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[10]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.text.Text at 0x119275950&gt;</pre>
+<pre>&lt;matplotlib.text.Text at 0x11b8ecd90&gt;</pre>
 </div>
 
 </div>
@@ -13463,7 +13462,7 @@ QmCC
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">potential_outlier_total_payment</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">enron_data</span><span class="p">[</span><span class="s1">&#39;total_payments&#39;</span><span class="p">])</span>
@@ -13537,7 +13536,7 @@ QmCC
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">null_percentage</span><span class="o">=</span><span class="n">enron_data</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="n">total_obervation</span>
@@ -13561,7 +13560,7 @@ QmCC
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[17]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[13]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -13748,7 +13747,7 @@ The final variables are following</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">excluded_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;deferral_payments&#39;</span><span class="p">,</span> <span class="s1">&#39;director_fees&#39;</span><span class="p">,</span> 
@@ -13769,7 +13768,7 @@ The final variables are following</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[18]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[14]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -13832,7 +13831,7 @@ The final variables are following</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">enron_data</span><span class="o">=</span><span class="n">enron_data</span><span class="p">[[</span><span class="s1">&#39;poi&#39;</span><span class="p">,</span><span class="s1">&#39;salary&#39;</span><span class="p">,</span><span class="s1">&#39;total_payments&#39;</span><span class="p">,</span> <span class="s1">&#39;exercised_stock_options&#39;</span><span class="p">,</span> 
@@ -13859,7 +13858,7 @@ The final variables are following</p>
 </div>
 </div>
 
-<div class="output_area"><div class="prompt output_prompt">Out[19]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[15]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -17702,7 +17701,7 @@ YII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">enron_data</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;salary&#39;</span><span class="p">,</span> <span class="s1">&#39;bonus&#39;</span><span class="p">],</span> <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;poi&#39;</span><span class="p">])</span>
@@ -17717,7 +17716,7 @@ YII=
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[21]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[16]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -19266,7 +19265,7 @@ EamkkBARkUoKCRERqaSQEBGRSv8fdXu12+PVCZYAAAAASUVORK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -19286,11 +19285,11 @@ EamkkBARkUoKCRERqaSQEBGRSv8fdXu12+PVCZYAAAAASUVORK5CYII=
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[28]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[17]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x12ead37d0&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11cab7fd0&gt;</pre>
 </div>
 
 </div>
@@ -20160,7 +20159,7 @@ AAAASUVORK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">finding_k_best_score</span> <span class="kn">import</span> <span class="n">split_data</span><span class="p">,</span> <span class="n">features_importance</span><span class="p">,</span> <span class="n">imputed_data</span><span class="p">,</span> <span class="n">find_best_k</span>
@@ -20177,7 +20176,7 @@ AAAASUVORK5CYII=
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[22]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[18]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -20307,7 +20306,7 @@ AAAASUVORK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">enron_data</span><span class="p">[</span><span class="s1">&#39;propotion_messages_from_poi&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">enron_data</span><span class="p">[</span><span class="s1">&#39;from_poi_to_this_person&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">enron_data</span><span class="p">[</span><span class="s1">&#39;to_messages&#39;</span><span class="p">]</span>
@@ -20321,7 +20320,7 @@ AAAASUVORK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">enron_data</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;propotion_messages_from_poi&#39;</span><span class="p">,</span> <span class="s1">&#39;propotion_messages_to_poi&#39;</span><span class="p">],</span> <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;poi&#39;</span><span class="p">])</span>
@@ -20336,11 +20335,11 @@ AAAASUVORK5CYII=
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[24]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[20]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.text.Text at 0x12a6c1cd0&gt;</pre>
+<pre>&lt;matplotlib.text.Text at 0x11bfa9d10&gt;</pre>
 </div>
 
 </div>
@@ -20544,7 +20543,7 @@ LgPeAC5yzp0Th2nPBzZyzq3JuOwZwLuBu5xz789eW5FsFO/SSEp4bSZxXdKGWTcAInmneJeBpEEr
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">:</span>
@@ -20559,7 +20558,7 @@ LgPeAC5yzp0Th2nPBzZyzq3JuOwZwLuBu5xz789eW5FsFO/SSEp4bSZxXdKGWTcAInmneJeBpEEr
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">feature_list_update</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;poi&#39;</span><span class="p">,</span><span class="s1">&#39;salary&#39;</span><span class="p">,</span><span class="s1">&#39;to_messages&#39;</span><span class="p">,</span><span class="s1">&#39;total_payments&#39;</span><span class="p">,</span><span class="s1">&#39;exercised_stock_options&#39;</span><span class="p">,</span>
@@ -20577,7 +20576,7 @@ LgPeAC5yzp0Th2nPBzZyzq3JuOwZwLuBu5xz789eW5FsFO/SSEp4bSZxXdKGWTcAInmneJeBpEEr
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[26]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[22]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -20700,7 +20699,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">features_to_remove</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;from_messages&#39;</span><span class="p">,</span> <span class="s1">&#39;other&#39;</span><span class="p">,</span> <span class="s1">&#39;from_this_person_to_poi&#39;</span><span class="p">,</span> <span class="s1">&#39;to_messages&#39;</span><span class="p">,</span> <span class="s1">&#39;poi_email_propotion_from&#39;</span><span class="p">]</span>
@@ -20737,7 +20736,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="4.-Model-Selection">4. Model Selection<a class="anchor-link" href="#4.-Model-Selection">&#182;</a></h2>
+<h2 id="3.-Model-Selection">3. Model Selection<a class="anchor-link" href="#3.-Model-Selection">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -20746,8 +20745,9 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There are several classification models avaiable. In this section, I tested three classifers: SVM(linear), Randomforest, and Gaussian NaiveBayes. Since many features are correlated, I would like to perform pca for every classifier to creat a set of unrelated new feature components that can catch the variablities of the predictor.</p>
+<p>There are several classification models avaiable. In this section, I tested three classifers: SVM(linear), Randomforest, and Gaussian NaiveBayes.</p>
 <p>For the new features 'poi_email_propotion_to', there are some missing data, I used imputed methods to replace the missing data with mean. Since I want to apply PCA, I scaler all the features in the feature list.</p>
+<p>Since many features are correlated, I would like to perform pca for GNB classifier since the assumption is all the factors are unrelated. PCA creats a set of unrelated new feature components that can catch the variablities of the predictor. I also perform PCA for SVM classifier since it is computationally costly and dimension reduction will save the compuation. For Random Forest, I did not scale the variables and only applied select best K.</p>
 <p>I apply stratified cross validation 1000 times and grid search to find the best parameter for each models. Since the dataset is skewed and small, stratified cross validation is the best option. Grid search is also a handy method dealing with multiple parameter combination.</p>
 
 </div>
@@ -20755,7 +20755,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">my_dataset</span><span class="o">=</span><span class="n">data_dict</span>
@@ -20770,7 +20770,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
@@ -20804,7 +20804,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">steps_gnb</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;pre_pro&#39;</span><span class="p">,</span> <span class="n">Imputer</span><span class="p">(</span><span class="n">missing_values</span><span class="o">=</span><span class="s1">&#39;NaN&#39;</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span>
@@ -20812,7 +20812,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
                 <span class="p">(</span><span class="s1">&#39;reduce_dim&#39;</span><span class="p">,</span> <span class="n">PCA</span><span class="p">()),</span> 
                 <span class="p">(</span><span class="s1">&#39;GNB&#39;</span><span class="p">,</span> <span class="n">GaussianNB</span><span class="p">())]</span>
 <span class="n">GNB</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps_gnb</span><span class="p">)</span>
-<span class="n">cv</span><span class="o">=</span><span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+<span class="n">cv</span><span class="o">=</span><span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
 <span class="n">params_gnb</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">reduce_dim__n_components</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">])</span>
 <span class="n">clf_gnb</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">GNB</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">params_gnb</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1&#39;</span><span class="p">)</span>
 <span class="n">clf_gnb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
@@ -20834,11 +20834,11 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 </div>
 
-<div class="output_area"><div class="prompt output_prompt">Out[31]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[26]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>GridSearchCV(cv=StratifiedShuffleSplit(labels=[ 0.  0. ...,  1.  0.], n_iter=200, test_size=0.1, random_state=42),
+<pre>GridSearchCV(cv=StratifiedShuffleSplit(labels=[ 0.  0. ...,  1.  0.], n_iter=200, test_size=0.1, random_state=None),
        error_score=&#39;raise&#39;,
        estimator=Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=None, whiten=False)), (&#39;GNB&#39;, GaussianNB())]),
        fit_params={}, iid=True, n_jobs=1,
@@ -20854,7 +20854,34 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">clf_gnb</span><span class="o">.</span><span class="n">best_estimator_</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=5, whiten=False)), (&#39;GNB&#39;, GaussianNB())])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">clf_gnb</span><span class="o">=</span><span class="n">clf_gnb</span><span class="o">.</span><span class="n">best_estimator_</span>
@@ -20876,16 +20903,15 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">steps_rf</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;pre_pro&#39;</span><span class="p">,</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">Imputer</span><span class="p">(</span><span class="n">missing_values</span><span class="o">=</span><span class="s1">&#39;NaN&#39;</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span>
-                <span class="p">(</span><span class="s1">&#39;sek&#39;</span><span class="p">,</span> <span class="n">SelectKBest</span><span class="p">()),</span> <span class="p">(</span><span class="s1">&#39;feature_scaling&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
-                <span class="p">(</span><span class="s1">&#39;reduce_dim&#39;</span><span class="p">,</span> <span class="n">PCA</span><span class="p">()),</span> 
+                <span class="p">(</span><span class="s1">&#39;sek&#39;</span><span class="p">,</span> <span class="n">SelectKBest</span><span class="p">()),</span>
                  <span class="p">(</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">())]</span>
 <span class="n">rf</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps_rf</span><span class="p">)</span>
-<span class="n">cv</span><span class="o">=</span><span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
-<span class="n">params_rf</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sek__k</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span> <span class="n">reduce_dim__n_components</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">])</span>
+<span class="n">cv</span><span class="o">=</span><span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">params_rf</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sek__k</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">clf_rf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">rf</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">params_rf</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">)</span>
 <span class="n">clf_rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 </pre></div>
@@ -20898,18 +20924,19 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[41]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[29]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>GridSearchCV(cv=StratifiedShuffleSplit(labels=[ 0.  0. ...,  1.  0.], n_iter=200, test_size=0.1, random_state=42),
+<pre>GridSearchCV(cv=StratifiedShuffleSplit(labels=[ 0.  0. ...,  1.  0.], n_iter=200, test_size=0.1, random_state=None),
        error_score=&#39;raise&#39;,
-       estimator=Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;sek&#39;, SelectKBest(k=10, score_func=&lt;function f_classif at 0x12a764c08&gt;)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=None...n_jobs=1,
+       estimator=Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;sek&#39;, SelectKBest(k=10, score_func=&lt;function f_classif at 0x1135afa28&gt;)), (&#39;rf&#39;, RandomForestClassifier(bootstrap=True, class_weight=None, criterion=&#39;gini&#39;,
+            max_depth=None, max_features=&#39;a...n_jobs=1,
             oob_score=False, random_state=None, verbose=0,
             warm_start=False))]),
        fit_params={}, iid=True, n_jobs=1,
-       param_grid={&#39;reduce_dim__n_components&#39;: [5, 6, 7, 8], &#39;sek__k&#39;: [8, 9, 10]},
-       pre_dispatch=&#39;2*n_jobs&#39;, refit=True, scoring=&#39;f1&#39;, verbose=0)</pre>
+       param_grid={&#39;sek__k&#39;: [4, 5, 6, 7, 8, 9]}, pre_dispatch=&#39;2*n_jobs&#39;,
+       refit=True, scoring=&#39;f1&#39;, verbose=0)</pre>
 </div>
 
 </div>
@@ -20920,7 +20947,37 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">clf_rf</span><span class="o">.</span><span class="n">best_estimator_</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;sek&#39;, SelectKBest(k=5, score_func=&lt;function f_classif at 0x1135afa28&gt;)), (&#39;rf&#39;, RandomForestClassifier(bootstrap=True, class_weight=None, criterion=&#39;gini&#39;,
+            max_depth=None, max_features=&#39;au...n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False))])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">clf_rf</span><span class="o">=</span><span class="n">clf_rf</span><span class="o">.</span><span class="n">best_estimator_</span>
@@ -20942,7 +20999,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="prompt input_prompt">In&nbsp;[56]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">steps_svc</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;pre_pro&#39;</span><span class="p">,</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">Imputer</span><span class="p">(</span><span class="n">missing_values</span><span class="o">=</span><span class="s1">&#39;NaN&#39;</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span>
@@ -20951,8 +21008,8 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
                  <span class="p">(</span><span class="s1">&#39;reduce_dim&#39;</span><span class="p">,</span> <span class="n">PCA</span><span class="p">()),</span> 
                  <span class="p">(</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">))]</span>
 <span class="n">svc</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps_svc</span><span class="p">)</span>
-<span class="n">cv</span><span class="o">=</span><span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
-<span class="n">params_svc</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">reduce_dim__n_components</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span> <span class="n">svm__C</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+<span class="n">cv</span><span class="o">=</span><span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">params_svc</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">reduce_dim__n_components</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span> <span class="n">svm__C</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
 <span class="n">clf_svc</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">svc</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">params_svc</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;recall&#39;</span><span class="p">)</span>
 <span class="n">clf_svc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 </pre></div>
@@ -20965,17 +21022,17 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[44]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[56]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>GridSearchCV(cv=StratifiedShuffleSplit(labels=[ 0.  0. ...,  1.  0.], n_iter=200, test_size=0.1, random_state=42),
+<pre>GridSearchCV(cv=StratifiedShuffleSplit(labels=[ 0.  0. ...,  1.  0.], n_iter=200, test_size=0.1, random_state=None),
        error_score=&#39;raise&#39;,
-       estimator=Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;sek&#39;, SelectKBest(k=10, score_func=&lt;function f_classif at 0x12a764c08&gt;)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=None...,
+       estimator=Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;sek&#39;, SelectKBest(k=10, score_func=&lt;function f_classif at 0x1135afa28&gt;)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=None...,
   max_iter=-1, probability=False, random_state=None, shrinking=True,
   tol=0.001, verbose=False))]),
        fit_params={}, iid=True, n_jobs=1,
-       param_grid={&#39;svm__C&#39;: [0.1, 1, 10, 100], &#39;reduce_dim__n_components&#39;: [5, 7, 9]},
+       param_grid={&#39;svm__C&#39;: [1, 10, 100], &#39;reduce_dim__n_components&#39;: [5, 6, 7, 8, 9]},
        pre_dispatch=&#39;2*n_jobs&#39;, refit=True, scoring=&#39;recall&#39;, verbose=0)</pre>
 </div>
 
@@ -20987,10 +21044,10 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="prompt input_prompt">In&nbsp;[57]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">clf_svc</span><span class="o">=</span><span class="n">clf_svc</span><span class="o">.</span><span class="n">best_estimator_</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">clf_svc</span><span class="o">.</span><span class="n">best_estimator_</span>
 </pre></div>
 
 </div>
@@ -21002,17 +21059,27 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 
 
 <div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-48-14e4b60b2222&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>clf_svc<span class="ansi-blue-fg">=</span>clf_svc<span class="ansi-blue-fg">.</span>best_estimator_
-
-<span class="ansi-red-fg">AttributeError</span>: &#39;Pipeline&#39; object has no attribute &#39;best_estimator_&#39;</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;sek&#39;, SelectKBest(k=10, score_func=&lt;function f_classif at 0x1135afa28&gt;)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=9, w...,
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False))])
+</pre>
 </div>
 </div>
 
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">clf_svc</span><span class="o">=</span><span class="n">clf_svc</span><span class="o">.</span><span class="n">best_estimator_</span>
+</pre></div>
+
+</div>
 </div>
 </div>
 
@@ -21022,7 +21089,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Model-Comparision">Model Comparision<a class="anchor-link" href="#Model-Comparision">&#182;</a></h2>
+<h2 id="4.-Model-Evaluation">4. Model Evaluation<a class="anchor-link" href="#4.-Model-Evaluation">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -21038,7 +21105,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">test_classifier</span><span class="p">(</span><span class="n">clf_gnb</span><span class="p">,</span> <span class="n">my_dataset</span><span class="p">,</span> <span class="n">feature_list_update</span><span class="p">,</span> <span class="n">folds</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
@@ -21054,9 +21121,9 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=7, whiten=False)), (&#39;GNB&#39;, GaussianNB())])
-	Accuracy: 0.83213	Precision: 0.36253	Recall: 0.34150	F1: 0.35170	F2: 0.34551
-	Total predictions: 15000	True positives:  683	False positives: 1201	False negatives: 1317	True negatives: 11799
+<pre>Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=5, whiten=False)), (&#39;GNB&#39;, GaussianNB())])
+	Accuracy: 0.83413	Precision: 0.36593	Recall: 0.33300	F1: 0.34869	F2: 0.33910
+	Total predictions: 15000	True positives:  666	False positives: 1154	False negatives: 1334	True negatives: 11846
 
 </pre>
 </div>
@@ -21068,7 +21135,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">test_classifier</span><span class="p">(</span><span class="n">clf_rf</span><span class="p">,</span> <span class="n">my_dataset</span><span class="p">,</span> <span class="n">feature_list_update</span><span class="p">,</span> <span class="n">folds</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span>
@@ -21084,11 +21151,12 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;sek&#39;, SelectKBest(k=8, score_func=&lt;function f_classif at 0x12a764c08&gt;)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=6, wh...n_jobs=1,
+<pre>Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;sek&#39;, SelectKBest(k=5, score_func=&lt;function f_classif at 0x1135afa28&gt;)), (&#39;rf&#39;, RandomForestClassifier(bootstrap=True, class_weight=None, criterion=&#39;gini&#39;,
+            max_depth=None, max_features=&#39;au...n_jobs=1,
             oob_score=False, random_state=None, verbose=0,
             warm_start=False))])
-	Accuracy: 0.84200	Precision: 0.27818	Recall: 0.11600	F1: 0.16373	F2: 0.13131
-	Total predictions: 15000	True positives:  232	False positives:  602	False negatives: 1768	True negatives: 12398
+	Accuracy: 0.85620	Precision: 0.41229	Recall: 0.18450	F1: 0.25492	F2: 0.20742
+	Total predictions: 15000	True positives:  369	False positives:  526	False negatives: 1631	True negatives: 12474
 
 </pre>
 </div>
@@ -21100,7 +21168,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="prompt input_prompt">In&nbsp;[59]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">test_classifier</span><span class="p">(</span><span class="n">clf_svc</span><span class="p">,</span> <span class="n">my_dataset</span><span class="p">,</span> <span class="n">feature_list_update</span><span class="p">,</span> <span class="n">folds</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span>
@@ -21116,11 +21184,11 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;sek&#39;, SelectKBest(k=10, score_func=&lt;function f_classif at 0x12a764c08&gt;)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=9, w...,
+<pre>Pipeline(steps=[(&#39;pre_pro&#39;, Imputer(axis=0, copy=True, missing_values=&#39;NaN&#39;, strategy=&#39;mean&#39;, verbose=0)), (&#39;sek&#39;, SelectKBest(k=10, score_func=&lt;function f_classif at 0x1135afa28&gt;)), (&#39;feature_scaling&#39;, StandardScaler(copy=True, with_mean=True, with_std=True)), (&#39;reduce_dim&#39;, PCA(copy=True, n_components=9, w...,
   max_iter=-1, probability=False, random_state=None, shrinking=True,
   tol=0.001, verbose=False))])
-	Accuracy: 0.86207	Precision: 0.44426	Recall: 0.13750	F1: 0.21000	F2: 0.15953
-	Total predictions: 15000	True positives:  275	False positives:  344	False negatives: 1725	True negatives: 12656
+	Accuracy: 0.86247	Precision: 0.44688	Recall: 0.13250	F1: 0.20440	F2: 0.15420
+	Total predictions: 15000	True positives:  265	False positives:  328	False negatives: 1735	True negatives: 12672
 
 </pre>
 </div>
@@ -21132,13 +21200,13 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">model_comparison</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-    <span class="p">{</span><span class="s1">&#39;GNB&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">:</span> <span class="mf">0.83213</span><span class="p">,</span> <span class="s1">&#39;Precision&#39;</span><span class="p">:</span> <span class="mf">0.36253</span><span class="p">,</span> <span class="s1">&#39;Recall&#39;</span><span class="p">:</span> <span class="mf">0.34150</span><span class="p">,</span> <span class="s1">&#39;F1&#39;</span><span class="p">:</span> <span class="mf">0.35170</span><span class="p">},</span> 
-<span class="s1">&#39;RF&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">:</span> <span class="mf">0.84200</span><span class="p">,</span>  <span class="s1">&#39;Precision&#39;</span><span class="p">:</span> <span class="mf">0.27818</span><span class="p">,</span> <span class="s1">&#39;Recall&#39;</span><span class="p">:</span> <span class="mf">0.11600</span><span class="p">,</span> <span class="s1">&#39;F1&#39;</span><span class="p">:</span> <span class="mf">0.15221</span><span class="p">},</span>
-<span class="s1">&#39;SVC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">:</span> <span class="mf">0.86207</span><span class="p">,</span> <span class="s1">&#39;Precision&#39;</span><span class="p">:</span> <span class="mf">0.44426</span><span class="p">,</span> <span class="s1">&#39;Recall&#39;</span><span class="p">:</span> <span class="mf">0.13750</span><span class="p">,</span> <span class="s1">&#39;F1&#39;</span><span class="p">:</span> <span class="mf">0.21000</span><span class="p">}})</span>
+    <span class="p">{</span><span class="s1">&#39;GNB&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">:</span> <span class="mf">0.83413</span><span class="p">,</span> <span class="s1">&#39;Precision&#39;</span><span class="p">:</span> <span class="mf">0.36593</span><span class="p">,</span> <span class="s1">&#39;Recall&#39;</span><span class="p">:</span> <span class="mf">0.33300</span><span class="p">,</span> <span class="s1">&#39;F1&#39;</span><span class="p">:</span> <span class="mf">0.25492</span><span class="p">},</span> 
+<span class="s1">&#39;RF&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">:</span> <span class="mf">0.85620</span><span class="p">,</span>  <span class="s1">&#39;Precision&#39;</span><span class="p">:</span> <span class="mf">0.41229</span><span class="p">,</span> <span class="s1">&#39;Recall&#39;</span><span class="p">:</span> <span class="mf">0.18450</span><span class="p">,</span> <span class="s1">&#39;F1&#39;</span><span class="p">:</span> <span class="mf">0.15221</span><span class="p">},</span>
+<span class="s1">&#39;SVC&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">:</span> <span class="mf">0.86207</span><span class="p">,</span> <span class="s1">&#39;Precision&#39;</span><span class="p">:</span> <span class="mf">0.44688</span><span class="p">,</span> <span class="s1">&#39;Recall&#39;</span><span class="p">:</span> <span class="mf">0.13250</span><span class="p">,</span> <span class="s1">&#39;F1&#39;</span><span class="p">:</span> <span class="mf">0.21000</span><span class="p">}})</span>
 
 <span class="n">model_comparison</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;F1&#39;</span><span class="p">)</span>
 </pre></div>
@@ -21151,7 +21219,7 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[49]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[60]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -21168,24 +21236,24 @@ Comparing two feature selection results, we found variable 'from_message', 'to_m
   <tbody>
     <tr>
       <th>RF</th>
-      <td>0.84200</td>
+      <td>0.85620</td>
       <td>0.15221</td>
-      <td>0.27818</td>
-      <td>0.1160</td>
+      <td>0.41229</td>
+      <td>0.1845</td>
     </tr>
     <tr>
       <th>SVC</th>
       <td>0.86207</td>
       <td>0.21000</td>
-      <td>0.44426</td>
-      <td>0.1375</td>
+      <td>0.44688</td>
+      <td>0.1325</td>
     </tr>
     <tr>
       <th>GNB</th>
-      <td>0.83213</td>
-      <td>0.35170</td>
-      <td>0.36253</td>
-      <td>0.3415</td>
+      <td>0.83413</td>
+      <td>0.25492</td>
+      <td>0.36593</td>
+      <td>0.3330</td>
     </tr>
   </tbody>
 </table>

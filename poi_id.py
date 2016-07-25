@@ -97,7 +97,7 @@ steps_gnb = [('pre_pro', Imputer(missing_values='NaN', strategy='mean', axis=0))
                 ('reduce_dim', PCA()), 
                 ('GNB', GaussianNB())]
 GNB = Pipeline(steps_gnb)
-cv=StratifiedShuffleSplit(labels, 1000, random_state = 42)
+cv=StratifiedShuffleSplit(labels, 1000)
 params_gnb = dict( reduce_dim__n_components=[5, 6, 7, 8, 9, 10])
 clf_gnb = GridSearchCV(GNB, param_grid=params_gnb, cv=cv, scoring='f1')
 clf_gnb.fit(features, labels)
@@ -105,11 +105,9 @@ clf_gnb=clf_gnb.best_estimator_
 
 #RomdonForest
 steps_rf = [('pre_pro', preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0)),
-                ('feature_scaling', StandardScaler()),
-                ('reduce_dim', PCA()), 
                  ('rf', RandomForestClassifier())]
 rf = Pipeline(steps_rf)
-cv=StratifiedShuffleSplit(labels, 200, random_state = 42)
+cv=StratifiedShuffleSplit(labels, 200)
 params_rf = dict(sek__k=[8,9,10], reduce_dim__n_components=[5,6,7,8])
 clf_rf = GridSearchCV(rf, param_grid=params_rf, scoring='f1', cv=cv)
 clf_rf.fit(features, labels)
@@ -120,8 +118,8 @@ steps_svc = [('pre_pro', preprocessing.Imputer(missing_values='NaN', strategy='m
                  ('reduce_dim', PCA()), 
                  ('svm', SVC(kernel='linear'))]
 svc = Pipeline(steps_svc)
-cv=StratifiedShuffleSplit(labels, 200, random_state = 42)
-params_svc = dict(reduce_dim__n_components=[5,7,9], svm__C=[1, 10, 100])
+cv=StratifiedShuffleSplit(labels, 200)
+params_svc = dict(reduce_dim__n_components=[5,6,7,8,9], svm__C=[1, 10, 100])
 clf_svc = GridSearchCV(svc, param_grid=params_svc, cv=cv, scoring='recall')
 clf_svc.fit(features, labels)
 clf_svc=clf_svc.best_estimator_
