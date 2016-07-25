@@ -18,7 +18,7 @@ def split_data(my_dataset, feature_list, random_state):
     return features_train, features_test, labels_train, labels_test
 
 def features_importance(features_train, labels_train, feature_list):   
-    X=SelectKBest(k=5)
+    X=SelectKBest()
     X.fit(features_train, labels_train)
     Scores=X.scores_
     Pvalues=X.pvalues_
@@ -40,9 +40,9 @@ def find_best_k(my_dataset, feature_list, random_states):
         table_importance=features_importance(features_train, labels_train, feature_list)
         for feature in feature_list[1:]:
             try:
-                final_scores[feature]+=table_importance['Scores'][feature]/200
-                final_pvalue[feature]+=table_importance['Pvalues'][feature]/200
+                final_scores[feature]+=table_importance['Scores'][feature]/len(random_states)
+                final_pvalue[feature]+=table_importance['Pvalues'][feature]/len(random_states)
             except KeyError:
-                final_scores[feature]=table_importance['Scores'][feature]/200
-                final_pvalue[feature]=table_importance['Pvalues'][feature]/200
+                final_scores[feature]=table_importance['Scores'][feature]/len(random_states)
+                final_pvalue[feature]=table_importance['Pvalues'][feature]/len(random_states)
     return pd.DataFrame({'Pvalues': final_pvalue, 'Scores': final_scores}, index=feature_list[1:]).sort_values('Pvalues')
