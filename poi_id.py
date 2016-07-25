@@ -105,15 +105,17 @@ clf_gnb=clf_gnb.best_estimator_
 
 #RomdonForest
 steps_rf = [('pre_pro', preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0)),
+                ('sek', SelectKBest()),
                  ('rf', RandomForestClassifier())]
 rf = Pipeline(steps_rf)
 cv=StratifiedShuffleSplit(labels, 200)
-params_rf = dict(sek__k=[8,9,10], reduce_dim__n_components=[5,6,7,8])
+params_rf = dict(sek__k=range(4,10))
 clf_rf = GridSearchCV(rf, param_grid=params_rf, scoring='f1', cv=cv)
 clf_rf.fit(features, labels)
 clf_rf=clf_rf.best_estimator_
 #SVC
 steps_svc = [('pre_pro', preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0)),
+                ('sek', SelectKBest()),
                 ('feature_scaling', StandardScaler()),     
                  ('reduce_dim', PCA()), 
                  ('svm', SVC(kernel='linear'))]
